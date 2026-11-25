@@ -2544,7 +2544,11 @@ class GizeFlowApp:
         self.refresh_task_trackers()
 
 
-if __name__ == "__main__":
+def main():
     root = tk.Tk()
-    app = GizeFlowApp(root)
+    GizeFlowApp(root)
     root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
