@@ -377,7 +377,7 @@ class GizeFlowApp:
         self.subtitle_lbl = tk.Label(
             title_box,
             text="Minimalist Daily Planner & Energy Batcher",
-            font=("Segoe UI", 9),
+            font=("Segoe UI", 9, "bold"),
         )
         self.subtitle_lbl.pack(anchor="w")
         self.title_box = title_box
@@ -2222,7 +2222,7 @@ class GizeFlowApp:
             self.date_controls_frame.pack_forget()
             self.date_controls_frame.pack(side="top", fill="x")
             self.title_lbl.configure(font=("Segoe UI", 13, "bold"))
-            self.subtitle_lbl.configure(font=("Segoe UI", 8))
+            self.subtitle_lbl.configure(font=("Segoe UI", 8, "bold"))
             self.search_entry.configure(width=15)
             for group in (
                 self.mgr_search_group,
@@ -2288,7 +2288,7 @@ class GizeFlowApp:
             self.date_controls_frame.pack_forget()
             self.date_controls_frame.pack(side="left")
             self.title_lbl.configure(font=("Segoe UI", 15, "bold"))
-            self.subtitle_lbl.configure(font=("Segoe UI", 9))
+            self.subtitle_lbl.configure(font=("Segoe UI", 9, "bold"))
             self.search_entry.configure(width=26)
             for group in (
                 self.mgr_search_group,
