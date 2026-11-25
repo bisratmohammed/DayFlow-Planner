@@ -844,7 +844,7 @@ class DayFlowApp:
 
         # Filter Bar
         filter_bar = tk.Frame(container)
-        filter_bar.pack(fill="x", pady=(0, 10))
+        filter_bar.pack(fill="x")
         self.mgr_filter_bar = filter_bar
 
         search_group = tk.Frame(filter_bar)
