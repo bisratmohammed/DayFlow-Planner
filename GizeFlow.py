@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import uuid
 
 # ==============================================================================
-# DAYFLOW DAILY PLANNER - PYTHON DESKTOP EDITION (TKINTER)
+# GIZEFLOW DAILY PLANNER - PYTHON DESKTOP EDITION (TKINTER)
 # ==============================================================================
 # Features:
 # 1. Time-Blocked Schedule (6:00 AM - 11:00 PM) with quick hour assignment
@@ -23,14 +23,15 @@ import uuid
 USER_DATA_ROOT = os.environ.get("LOCALAPPDATA") or os.path.join(
     os.path.expanduser("~"), ".local", "share"
 )
-DATA_DIR = os.path.join(USER_DATA_ROOT, "DayFlow")
-DATA_FILE = os.path.join(DATA_DIR, "dayflow_data.json")
+DATA_DIR = os.path.join(USER_DATA_ROOT, "GizeFlow")
+DATA_FILE = os.path.join(DATA_DIR, "gizeflow_data.json")
+LEGACY_DATA_FILE = os.path.join(USER_DATA_ROOT, "DayFlow", "dayflow_data.json")
 
 
-class DayFlowApp:
+class GizeFlowApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("DayFlow — Minimalist Daily Planner & Energy Batcher")
+        self.root.title("GizeFlow — Minimalist Daily Planner & Energy Batcher")
         self.root.geometry("1120x740")
         self.root.minsize(900, 620)
 
@@ -109,9 +110,13 @@ class DayFlowApp:
     # --------------------------------------------------------------------------
     def load_data(self):
         """Load tasks and reflections from local JSON storage."""
-        if os.path.exists(DATA_FILE):
+        data_file = DATA_FILE
+        if not os.path.exists(data_file) and os.path.exists(LEGACY_DATA_FILE):
+            data_file = LEGACY_DATA_FILE
+
+        if os.path.exists(data_file):
             try:
-                with open(DATA_FILE, "r", encoding="utf-8") as f:
+                with open(data_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     self.tasks = data.get("tasks", [])
                     self.reflections = data.get("reflections", {})
@@ -119,6 +124,8 @@ class DayFlowApp:
                     layout_mode = data.get("layout_mode", "Desktop")
                     if layout_mode in ("Desktop", "Mobile"):
                         self.layout_mode = layout_mode
+                    if data_file == LEGACY_DATA_FILE:
+                        self.save_data()
                     return
             except Exception as e:
                 print(f"Error loading data: {e}")
@@ -149,7 +156,7 @@ class DayFlowApp:
         """Export backup JSON file via file dialog."""
         filepath = filedialog.asksaveasfilename(
             defaultextension=".json",
-            initialfile=f"dayflow_backup_{self.current_date}.json",
+            initialfile=f"gizeflow_backup_{self.current_date}.json",
             filetypes=[("JSON Files", "*.json")],
         )
         if filepath:
@@ -168,7 +175,7 @@ class DayFlowApp:
         """Export task records to an Excel-compatible workbook."""
         filepath = filedialog.asksaveasfilename(
             defaultextension=".xlsx",
-            initialfile=f"dayflow_tasks_{self.current_date}.xlsx",
+            initialfile=f"gizeflow_tasks_{self.current_date}.xlsx",
             filetypes=[("Excel Workbook", "*.xlsx")],
         )
         if not filepath:
@@ -364,7 +371,7 @@ class DayFlowApp:
         title_box = tk.Frame(self.header_frame)
         title_box.pack(side="left", padx=12)
         self.title_lbl = tk.Label(
-            title_box, text="DayFlow", font=("Segoe UI", 15, "bold")
+            title_box, text="GizeFlow", font=("Segoe UI", 15, "bold")
         )
         self.title_lbl.pack(anchor="w")
         self.subtitle_lbl = tk.Label(
@@ -2539,5 +2546,5 @@ class DayFlowApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = DayFlowApp(root)
+    app = GizeFlowApp(root)
     root.mainloop()
