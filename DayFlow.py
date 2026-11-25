@@ -1345,12 +1345,12 @@ class DayFlowApp:
             start_date = range_state["start_date"]
             end_date = range_state["end_date"]
             if period == "week":
-                title = f"Weekly Task Tracker · {start_date:%b %d, %Y} – {end_date:%b %d, %Y}"
+                title_prefix = "Weekly Task Tracker"
                 tree = self.weekly_tracker_tree
                 title_label = self.weekly_tracker_title
                 summary_label = self.weekly_tracker_summary
             else:
-                title = f"Monthly Task Tracker · {start_date:%b %d, %Y} – {end_date:%b %d, %Y}"
+                title_prefix = "Monthly Task Tracker"
                 tree = self.monthly_tracker_tree
                 title_label = self.monthly_tracker_title
                 summary_label = self.monthly_tracker_summary
@@ -1361,10 +1361,18 @@ class DayFlowApp:
                 end_date = datetime(selected_year, 12, 31).date()
             except ValueError:
                 return
-            title = f"Yearly Task Tracker · {selected_year}"
+            title_prefix = "Yearly Task Tracker"
             tree = self.yearly_tracker_tree
             title_label = self.yearly_tracker_title
             summary_label = self.yearly_tracker_summary
+
+        period_label = f"{start_date:%b %d, %Y} – {end_date:%b %d, %Y}"
+        if self.layout_mode == "Mobile":
+            title = f"{title_prefix}\n{period_label}"
+        elif period == "year":
+            title = f"{title_prefix} · {selected_year}"
+        else:
+            title = f"{title_prefix} · {period_label}"
 
         period_tasks = []
         for task in self.tasks:
@@ -1383,7 +1391,10 @@ class DayFlowApp:
 
         period_tasks.sort(key=sort_key)
         completed = sum(1 for _, task in period_tasks if task.get("completed"))
-        title_label.config(text=title)
+        title_label.config(
+            text=title,
+            font=("Segoe UI", 11 if self.layout_mode == "Mobile" else 14, "bold"),
+        )
         summary_label.config(
             text=f"{completed} of {len(period_tasks)} tasks completed"
         )
@@ -2092,6 +2103,7 @@ class DayFlowApp:
             return
         self.layout_mode = mode
         self.apply_layout()
+        self.refresh_task_trackers()
         self.update_layout_toggle()
         self.save_data()
 
