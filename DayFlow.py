@@ -971,10 +971,11 @@ class DayFlowApp:
                 font=("Segoe UI", 10, "italic"),
                 pady=30,
             ).pack()
-            return
+        else:
+            for task in filtered:
+                self.render_task_card(self.mgr_list_frame, task, compact=False)
 
-        for task in filtered:
-            self.render_task_card(self.mgr_list_frame, task, compact=False)
+        self.mgr_canvas.after_idle(self.mgr_canvas.yview_moveto, 0)
 
     # --------------------------------------------------------------------------
     # TAB 3: DAILY REVIEW & ANALYTICS
